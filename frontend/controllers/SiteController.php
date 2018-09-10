@@ -69,7 +69,7 @@ class SiteController extends Controller
         if  (Yii::$app->user->isGuest) {
             return $this->redirect('login');
         }
-        return $this->redirect('holidays/index');
+        return $this->redirect('holidays/');
     }
 
     /**

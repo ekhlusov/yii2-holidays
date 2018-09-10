@@ -6,9 +6,11 @@ use common\models\User;
 use Yii;
 use app\models\Holidays;
 use app\models\HolidaysSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\helpers\RolesHelper;
 
 /**
  * HolidaysController implements the CRUD actions for Holidays model.
@@ -21,6 +23,17 @@ class HolidaysController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                      [
+                        'actions' => ['index', 'create', 'update', 'approve'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -46,19 +59,6 @@ class HolidaysController extends Controller
     }
 
     /**
-     * Displays a single Holidays model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Holidays model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -69,7 +69,7 @@ class HolidaysController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Отпуск успешно добавлен');
-            return $this->redirect(['index', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -87,12 +87,13 @@ class HolidaysController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->user_id !== Yii::$app->user->identity->getId() || $model->approved !== 0) {
+        if ($model->user_id !== Yii::$app->user->identity->getId() || $model->approved !== Holidays::HOLIDAY_NOT_APPROVED) {
             $this->redirect('index');
         }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Даты отпусков успешно обновлены');
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('index');
         }
 
         return $this->render('update', [
@@ -114,7 +115,7 @@ class HolidaysController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->user_id !== Yii::$app->user->getId() || Yii::$app->user->identity->role !== User::ROLE_ADMIN) {
+        if ($model->user_id !== Yii::$app->user->getId() || !RolesHelper::isAdmin()) {
             return $this->redirect('index');
         }
         $model->delete();
@@ -132,16 +133,14 @@ class HolidaysController extends Controller
     {
         $model = $this->findModel($id);
 
-        // @todo вынести в отдельный класс
-        if (Yii::$app->user->identity->role !== User::ROLE_MANAGER || Yii::$app->user->identity->role !== User::ROLE_ADMIN || $model->approved !== 1) {
+        if (!RolesHelper::isAdmin() || $model->approved !== 1) {
             $this->redirect('index');
         }
 
-        // @todo вынести в константы
-        $model->approved = 1;
+        $model->approved = Holidays::HOLIDAY_APPROVED;
         if ($model->save()) {
             Yii::$app->session->setFlash('success', 'Отпуск одобрен');
-            return $this->redirect(['index', 'id' => $model->id]);
+            return $this->redirect('index');
         }
         return Yii::$app->session->setFlash('error', 'Не удалось одобрить отпуск');
     }

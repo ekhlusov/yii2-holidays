@@ -7,7 +7,7 @@ $params = array_merge(
 );
 
 return [
-    'id'                  => 'app-frontend',
+    'id'                  => 'efko-holidays',
     'name'                => 'ЭФКО - Отпуск сотрудников',
     'language'            => 'ru-RU',
     'basePath'            => dirname(__DIR__),
@@ -24,7 +24,7 @@ return [
         ],
         'session'      => [
             // this is the name of the session cookie used for login on the frontend
-            'name' => 'advanced-frontend',
+            'name' => 'efko-holidays',
         ],
         'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -44,6 +44,7 @@ return [
             'showScriptName'  => false,
             'rules'           => [
                 '<alias:\w+>'                       => 'site/<alias>',
+                '<alias:\w+>'                       => 'holidays/index',
                 'gii'                               => 'gii',
                 'gii/<controller:\w+>'              => 'gii/<controller>',
                 'gii/<controller:\w+>/<action:\w+>' => 'gii/<controller>/<action>',

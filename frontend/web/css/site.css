@@ -125,3 +125,13 @@ a.desc:after {
     font-size: 21px;
     font-weight: bold;
 }
+
+.approve-btn
+{
+    margin-left: 5px;
+}
+
+.my-holidays-btn
+{
+    margin-right: 20px;
+}

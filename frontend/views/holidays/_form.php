@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'user_id')->textInput()->hiddenInput(['value' => Yii::$app->user->identity->getId()])->label(false) ?>
+    <?= $form->field($model, 'user_id')->textInput()->hiddenInput(['value' => Yii::$app->user->getId()])->label(false) ?>
 
     <div class="row">
         <div class="col-md-6">
