@@ -46,7 +46,15 @@ class HolidaysSearch extends Holidays
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query'      => $query,
+            'sort'       => [
+                'defaultOrder' => ['id' => SORT_DESC]
+            ],
+            'pagination' => [
+                'forcePageParam' => false,
+                'pageSizeParam'  => false,
+                'pageSize'       => 25
+            ]
         ]);
 
         $this->load($params);
@@ -59,11 +67,11 @@ class HolidaysSearch extends Holidays
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'user_id' => $this->user_id,
+            'id'         => $this->id,
+            'user_id'    => $this->user_id,
             'date_start' => $this->date_start,
-            'date_end' => $this->date_end,
-            'approved' => $this->approved,
+            'date_end'   => $this->date_end,
+            'approved'   => $this->approved,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ]);

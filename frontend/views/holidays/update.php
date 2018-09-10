@@ -5,17 +5,15 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Holidays */
 
-$this->title = 'Update Holidays: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Holidays', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Обновить даты отпуска';
 ?>
 <div class="holidays-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+    <div class="panel panel-default">
+        <div class="panel-heading panel-top-heading"><?= Html::encode($this->title) ?></div>
+        <div class="panel-body">
+            <?= $this->render('_form', [
+                'model' => $model,
+            ]) ?>
+        </div>
+    </div>
 </div>

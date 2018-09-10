@@ -47,17 +47,17 @@ $this->title = 'Список отпусков';
 
                     return $model->approved ? 'Да' : 'Нет';
                 }],
-                ['header' => 'Действия', 'format' => 'html', 'value' => function ($model) {
-                    if ($model->user_id === Yii::$app->user->identity->getId()) {
-                        $buttons = '<a href="/holidays/update?id=' . $model->id . '" title="Редактировать" aria-label="Редактировать" data-pjax="0"><span class="glyphicon glyphicon-pencil"></span></a>';
-                        if  (Yii::$app->user->identity->role === User::ROLE_MANAGER || Yii::$app->user->identity->role === User::ROLE_ADMIN)
-                        {
-                            $buttons .= '<a href="/holidays/approve?id=' . $model->id . '" title="Подтвердить" aria-label="Подтвердить" data-pjax="0"><span class="glyphicon glyphicon-apple"></span></a>';
-
+                ['format' => 'html', 'contentOptions' => ['class' => 'text-right'], 'value' => function ($model) {
+                    if ($model->user_id === Yii::$app->user->identity->getId() && $model->approved !== 1) {
+                        $buttons = '<a href="update?id=' . $model->id . '" class="btn btn-xs btn-primary" data-pjax="0">Редактировать</a>';
+                        if (Yii::$app->user->identity->role === User::ROLE_MANAGER || Yii::$app->user->identity->role === User::ROLE_ADMIN) {
+                            $buttons .= '<a href="approve?id=' . $model->id . '" title="Подтвердить" aria-label="Подтвердить" data-pjax="0"><span class="glyphicon glyphicon-apple"></span></a>';
                         }
+
                         return $buttons;
 
                     }
+
                     return false;
                 }],
             ];

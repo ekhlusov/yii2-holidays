@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\User;
 use Yii;
 use app\models\Holidays;
 use app\models\HolidaysSearch;
@@ -86,10 +87,11 @@ class HolidaysController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if ($model->user_id !== Yii::$app->user->identity->getId()) {
+        if ($model->user_id !== Yii::$app->user->identity->getId() || $model->approved !== 0) {
             $this->redirect('index');
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Даты отпусков успешно обновлены');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -110,9 +112,38 @@ class HolidaysController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
+        if ($model->user_id !== Yii::$app->user->getId() || Yii::$app->user->identity->role !== User::ROLE_ADMIN) {
+            return $this->redirect('index');
+        }
+        $model->delete();
+        Yii::$app->session->setFlash('success', 'Отпуск успешно удален');
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Обновляет статуст подтверждения у отпуска
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionApprove($id)
+    {
+        $model = $this->findModel($id);
+
+        // @todo вынести в отдельный класс
+        if (Yii::$app->user->identity->role !== User::ROLE_MANAGER || Yii::$app->user->identity->role !== User::ROLE_ADMIN || $model->approved !== 1) {
+            $this->redirect('index');
+        }
+
+        // @todo вынести в константы
+        $model->approved = 1;
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Отпуск одобрен');
+            return $this->redirect(['index', 'id' => $model->id]);
+        }
+        return Yii::$app->session->setFlash('error', 'Не удалось одобрить отпуск');
     }
 
     /**
