@@ -86,7 +86,9 @@ class HolidaysController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        if ($model->user_id !== Yii::$app->user->identity->getId()) {
+            $this->redirect('index');
+        }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }

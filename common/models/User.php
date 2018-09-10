@@ -14,6 +14,7 @@ use yii\web\IdentityInterface;
  * @property integer $id
  * @property string  $username
  * @property string  $fio
+ * @property string  $role
  * @property string  $password_hash
  * @property string  $password_reset_token
  * @property string  $email
@@ -48,6 +49,16 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             TimestampBehavior::className(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeLabels() {
+        return [
+            /* Другие атрибуты */
+            'role' => 'Роль'
         ];
     }
 
