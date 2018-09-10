@@ -7,6 +7,7 @@ use yii\widgets\Pjax;
 use app\models\Holidays;
 use common\models\User;
 use common\helpers\RolesHelper;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\HolidaysSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -48,16 +49,16 @@ $this->title = 'Список отпусков';
                     return $model->approved ? 'Да' : 'Нет';
                 }],
                 ['format' => 'html', 'contentOptions' => ['class' => 'text-right'], 'value' => function ($model) {
+                    $buttons = false;
                     if ($model->user_id === Yii::$app->user->identity->getId() && $model->approved !== Holidays::HOLIDAY_APPROVED) {
-                        $buttons = Html::a('<i class="fas fa-pen-square"></i>', ["update?id={$model->id}"], ['class' => 'edit-btn btn btn-primary btn-xs', 'title' => 'Редактировать']);;
-                        if (RolesHelper::isAdmin()) {
-                            $buttons .= Html::a('<i class="fas fa-check-square"></i>', ["approve?id={$model->id}"], ['class' => 'approve-btn btn btn-success btn-xs', 'title' => 'Одобрить отпуск']);
-                        }
-
-                        return $buttons;
+                        $buttons = Html::a('<i class="fas fa-pen-square"></i>', ["update?id={$model->id}"], ['class' => 'edit-btn btn btn-primary btn-xs', 'title' => 'Редактировать']);
                     }
 
-                    return false;
+                    if (RolesHelper::isAdmin() && $model->approved !== Holidays::HOLIDAY_APPROVED) {
+                        $buttons .= Html::a('<i class="fas fa-check-square"></i>', ["approve?id={$model->id}"], ['class' => 'approve-btn btn btn-success btn-xs', 'title' => 'Одобрить отпуск']);
+                    }
+
+                    return $buttons ?: false;
                 }],
             ];
             ?>

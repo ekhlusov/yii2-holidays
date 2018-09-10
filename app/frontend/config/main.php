@@ -44,7 +44,6 @@ return [
             'showScriptName'  => false,
             'rules'           => [
                 '<alias:\w+>'                       => 'site/<alias>',
-                '<alias:\w+>'                       => 'holidays/index',
                 'gii'                               => 'gii',
                 'gii/<controller:\w+>'              => 'gii/<controller>',
                 'gii/<controller:\w+>/<action:\w+>' => 'gii/<controller>/<action>',

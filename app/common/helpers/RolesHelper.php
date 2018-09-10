@@ -16,7 +16,7 @@ class RolesHelper
      */
     public static function isAdmin()
     {
-        return Yii::$app->user->identity->role === User::ROLE_ADMIN || self::isManager();
+        return (Yii::$app->user->identity->role === User::ROLE_ADMIN || self::isManager());
     }
 
     /**

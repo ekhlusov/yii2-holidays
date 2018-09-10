@@ -26,16 +26,16 @@ class HolidaysController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                      [
+                    [
                         'actions' => ['index', 'create', 'update', 'approve'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow'   => true,
+                        'roles'   => ['@'],
                     ],
 
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
+            'verbs'  => [
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -45,6 +45,7 @@ class HolidaysController extends Controller
 
     /**
      * Lists all Holidays models.
+     *
      * @return mixed
      */
     public function actionIndex()
@@ -53,7 +54,7 @@ class HolidaysController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            'searchModel'  => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -61,14 +62,19 @@ class HolidaysController extends Controller
     /**
      * Creates a new Holidays model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     *
      * @return mixed
      */
     public function actionCreate()
     {
         $model = new Holidays();
 
+        $model->created_at = time();
+        $model->updated_at = time();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Отпуск успешно добавлен');
+
             return $this->redirect(['index']);
         }
 
@@ -80,7 +86,9 @@ class HolidaysController extends Controller
     /**
      * Updates an existing Holidays model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -91,8 +99,11 @@ class HolidaysController extends Controller
             $this->redirect('index');
         }
 
+        $model->updated_at = time();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'Даты отпусков успешно обновлены');
+
             return $this->redirect('index');
         }
 
@@ -104,6 +115,7 @@ class HolidaysController extends Controller
     /**
      * Deletes an existing Holidays model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param $id
      *
      * @return \yii\web\Response
@@ -120,12 +132,15 @@ class HolidaysController extends Controller
         }
         $model->delete();
         Yii::$app->session->setFlash('success', 'Отпуск успешно удален');
+
         return $this->redirect(['index']);
     }
 
     /**
      * Обновляет статуст подтверждения у отпуска
+     *
      * @param integer $id
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
@@ -137,18 +152,24 @@ class HolidaysController extends Controller
             $this->redirect('index');
         }
 
+        $model->updated_at = time();
         $model->approved = Holidays::HOLIDAY_APPROVED;
+
         if ($model->save()) {
             Yii::$app->session->setFlash('success', 'Отпуск одобрен');
+
             return $this->redirect('index');
         }
+
         return Yii::$app->session->setFlash('error', 'Не удалось одобрить отпуск');
     }
 
     /**
      * Finds the Holidays model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
+     *
      * @return Holidays the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
