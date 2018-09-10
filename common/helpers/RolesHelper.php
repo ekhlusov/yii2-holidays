@@ -1,6 +1,7 @@
 <?php
 
 namespace common\helpers;
+use Yii;
 use \common\models\User;
 /**
  * Class RolesHelper
