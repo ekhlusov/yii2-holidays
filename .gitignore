@@ -1,35 +1,25 @@
-# yii console commands
-/yii
-/yii_test
-/yii_test.bat
+vendor/
+node_modules/
+npm-debug.log
 
-# phpstorm project files
-.idea
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
 
-# netbeans project files
-nbproject
+# Laravel 5 & Lumen specific
+public/storage
+public/hot
+storage/*.key
+.env.*.php
+.env.php
+.env
+Homestead.yaml
+Homestead.json
+/runtime
+/mount
 
-# zend studio for eclipse project files
-.buildpath
-.project
-.settings
+# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
+.rocketeer/
+/.idea
+wp-config.php
 
-# windows thumbnail cache
-Thumbs.db
-
-# composer vendor dir
-/vendor
-
-# composer itself is not needed
-composer.phar
-
-# Mac DS_Store Files
-.DS_Store
-
-# phpunit itself is not needed
-phpunit.phar
-# local phpunit config
-/phpunit.xml
-
-# vagrant runtime
-/.vagrant

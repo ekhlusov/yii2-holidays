@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  
+  nginx:
+    restart: always
+    build: ./containers/nginx/
+    links:
+     - php
+    ports:
+     - "54480:80"
+    volumes_from:
+     - php
+
+  db:
+    restart: always
+    build: ./containers/db/
+    ports:
+     - "44406:3306"
+    volumes:
+      - ./runtime/db:/var/lib/mysql
+    env_file: ./containers/db/.env
+
+  php:
+    restart: always
+    links:
+     - db
+    build: ./containers/php/
+    volumes:
+     - ./app:/app/htdocs
+     - ./runtime/logs:/app/log
